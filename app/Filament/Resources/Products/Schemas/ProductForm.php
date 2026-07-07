@@ -8,7 +8,6 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Schema;
-use Filament\Forms\Set;
 use Illuminate\Support\Str;
 
 class ProductForm
@@ -26,7 +25,7 @@ class ProductForm
                 TextInput::make('title')
                     ->required()
                     ->live(onBlur: true)
-                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state)))
+                    ->afterStateUpdated(fn ($set, ?string $state) => $set('slug', Str::slug($state)))
                     ->columnSpan(1),
                 TextInput::make('slug')
                     ->required()
