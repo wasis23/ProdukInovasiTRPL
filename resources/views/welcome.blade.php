@@ -17,8 +17,18 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex !important;
+            flex-direction: column !important;
+            min-height: 100vh !important;
+        }
+        main {
+            flex-grow: 1 !important;
         }
         h1, h2, h3, .font-heading {
             font-family: 'Outfit', sans-serif;
@@ -216,25 +226,7 @@
         </section>
     @endif
 
-    <!-- Hero Section -->
-    <section class="relative pt-12 pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/5 text-xs text-indigo-600 dark:text-indigo-400 font-semibold tracking-wide uppercase mb-6">
-            <span class="flex h-2 w-2 relative">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-            </span>
-            Showcase Hasil Karya Terbaik
-        </div>
-        
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-950 dark:text-white mb-6 max-w-4xl mx-auto leading-none">
-            Showcase Inovasi Teknologi<br>
-            <span class="bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500 dark:from-indigo-400 dark:via-purple-400 dark:to-emerald-400 bg-clip-text text-transparent">Rekayasa Perangkat Lunak</span>
-        </h1>
-        
-        <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-6 font-light leading-relaxed">
-            Menampilkan produk-produk kreatif hasil karya mahasiswa D4 TRPL dalam bidang pengembangan Website, Internet of Things (IoT), dan Interactive Games.
-        </p>
-    </section>
+
 
     <!-- Catalog Section -->
     <section id="katalog" class="pt-2 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24">
