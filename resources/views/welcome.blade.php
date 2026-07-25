@@ -40,6 +40,12 @@
             box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.3);
         }
         [x-cloak] { display: none !important; }
+        .video-portrait {
+            aspect-ratio: 9 / 16 !important;
+            max-width: 340px !important;
+            margin: 0 auto !important;
+            width: 100% !important;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col relative overflow-x-hidden transition-colors duration-300" x-data="{
@@ -63,6 +69,10 @@
         this.modalOpen = false;
         this.activeVideoUrl = '';
         this.selectedProduct = null;
+    },
+    isPortraitVideo() {
+        if (!this.activeVideoUrl) return false;
+        return this.activeVideoUrl.includes('tiktok.com') || this.activeVideoUrl.includes('instagram.com');
     }
 }" :class="theme === 'dark' ? 'dark bg-[#0b0f19] text-slate-200' : 'bg-slate-50 text-slate-800'">
 
@@ -560,12 +570,15 @@
                             
                             <!-- Video Section -->
                             <div class="w-full">
-                                <div class="aspect-video w-full rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-lg relative">
+                                <div 
+                                    :class="isPortraitVideo() ? 'video-portrait' : 'aspect-video w-full'" 
+                                    class="rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 shadow-lg relative transition-all duration-300"
+                                >
                                     <!-- Embedded Iframe Loaded Dynamically -->
                                     <template x-if="activeVideoUrl">
                                         <iframe 
                                             :src="activeVideoUrl" 
-                                            class="w-full h-full" 
+                                            class="w-full h-full border-0" 
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                                             allowfullscreen
                                         ></iframe>
