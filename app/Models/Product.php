@@ -70,6 +70,14 @@ class Product extends Model
             return $url;
         }
 
+        // Check if Instagram
+        if (stripos($url, 'instagram.com') !== false || stripos($url, 'instagr.am') !== false) {
+            if (preg_match('/(?:instagram\.com|instagr\.am)\/(?:p|reel|tv)\/([A-Za-z0-9_-]+)/i', $url, $match)) {
+                return "https://www.instagram.com/p/" . $match[1] . "/embed";
+            }
+            return $url;
+        }
+
         $videoId = '';
         // Match YouTube video ID from various URL patterns (watch, share, shorts, embed)
         if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/|youtube\.com/shorts/)([^"&?/ ]{11})%i', $url, $match)) {

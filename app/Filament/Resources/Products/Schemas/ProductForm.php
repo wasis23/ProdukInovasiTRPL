@@ -34,9 +34,9 @@ class ProductForm
                 TextInput::make('youtube_url')
                     ->url()
                     ->required()
-                    ->label('Video URL (YouTube / TikTok)')
-                    ->placeholder('https://www.youtube.com/watch?v=... atau https://www.tiktok.com/@username/video/...')
-                    ->helperText('Masukkan URL video YouTube atau TikTok (biasa, Shorts, atau TikTok)')
+                    ->label('Video URL (YouTube / TikTok / Instagram)')
+                    ->placeholder('https://www.youtube.com/watch?v=..., https://www.tiktok.com/@username/video/..., atau https://www.instagram.com/reel/...')
+                    ->helperText('Masukkan URL video YouTube, TikTok, atau Instagram (Reels/Post).')
                     ->columnSpan(1),
                 TextInput::make('live_preview_url')
                     ->url()
