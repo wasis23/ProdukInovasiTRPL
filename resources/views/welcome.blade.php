@@ -123,7 +123,7 @@
 
         <!-- Image Slider at the Top -->
         @if($sliderImages->isNotEmpty())
-            <section class="w-full mb-12" x-data="{
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-4" x-data="{
                 currentSlide: 0,
                 totalSlides: {{ $sliderImages->count() }},
                 autoplayInterval: null,
@@ -144,7 +144,7 @@
                     this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
                 }
             }" x-init="startAutoplay()" @mouseenter="stopAutoplay()" @mouseleave="startAutoplay()">
-                <div class="relative w-full overflow-hidden aspect-[21/9] min-h-[300px] sm:min-h-[400px] md:min-h-[450px] lg:min-h-[500px] bg-slate-950 shadow-xl group">
+                <div class="relative rounded-3xl overflow-hidden aspect-[21/9] min-h-[300px] sm:min-h-[400px] bg-slate-950 border border-slate-200/80 dark:border-slate-800 shadow-xl group">
                     <!-- Slides -->
                     <div class="relative w-full h-full">
                         @foreach($sliderImages as $index => $slide)
@@ -170,20 +170,18 @@
                                 
                                 <!-- Slide Content -->
                                 @if($slide->title || $slide->description)
-                                    <div class="absolute bottom-0 left-0 right-0 py-8 px-4 sm:py-12 sm:px-6 lg:px-8 text-left">
-                                        <div class="max-w-7xl mx-auto">
-                                            <div class="max-w-2xl">
-                                                @if($slide->title)
-                                                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-3 tracking-tight font-heading leading-tight drop-shadow-md">
-                                                        {{ $slide->title }}
-                                                    </h2>
-                                                @endif
-                                                @if($slide->description)
-                                                    <p class="text-sm sm:text-base text-slate-200 font-light drop-shadow-sm line-clamp-2">
-                                                        {{ $slide->description }}
-                                                    </p>
-                                                @endif
-                                            </div>
+                                    <div class="absolute bottom-0 left-0 right-0 p-8 sm:p-12 text-left">
+                                        <div class="max-w-2xl">
+                                            @if($slide->title)
+                                                <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-3 tracking-tight font-heading leading-tight drop-shadow-md">
+                                                    {{ $slide->title }}
+                                                </h2>
+                                            @endif
+                                            @if($slide->description)
+                                                <p class="text-sm sm:text-base text-slate-200 font-light drop-shadow-sm line-clamp-2">
+                                                    {{ $slide->description }}
+                                                </p>
+                                            @endif
                                         </div>
                                     </div>
                                 @endif
@@ -196,7 +194,7 @@
                         <!-- Left Arrow -->
                         <button 
                             @click="prev()" 
-                            class="absolute left-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg z-10"
+                            class="absolute left-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg"
                         >
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
@@ -206,7 +204,7 @@
                         <!-- Right Arrow -->
                         <button 
                             @click="next()" 
-                            class="absolute right-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg z-10"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg"
                         >
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
@@ -214,7 +212,7 @@
                         </button>
 
                         <!-- Indicators -->
-                        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                        <div class="absolute bottom-6 right-8 flex gap-2 z-10">
                             @foreach($sliderImages as $index => $slide)
                                 <button 
                                     @click="currentSlide = {{ $index }}"
