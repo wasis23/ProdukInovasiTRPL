@@ -18,7 +18,9 @@ class ProductController extends Controller
         // Eager load category and images to avoid N+1 query problems
         $products = Product::with(['category', 'images'])->latest()->get();
         $setting = Setting::getSolo();
+        $testimonials = \App\Models\Testimonial::latest()->get();
+        $sliderImages = \App\Models\SliderImage::latest()->get();
 
-        return view('welcome', compact('categories', 'products', 'setting'));
+        return view('welcome', compact('categories', 'products', 'setting', 'testimonials', 'sliderImages'));
     }
 }

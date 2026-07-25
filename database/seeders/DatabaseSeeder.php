@@ -135,5 +135,104 @@ class DatabaseSeeder extends Seeder
         $img3b = $generatePlaceholder('game_2.jpg', 'Lost Temple VR - Environment', '#b45309');
         ProductImage::create(['product_id' => $p3->id, 'image_path' => $img3a]);
         ProductImage::create(['product_id' => $p3->id, 'image_path' => $img3b]);
+
+        // 5. Create Testimonials
+        Storage::disk('public')->makeDirectory('testimonials');
+        Storage::disk('public')->makeDirectory('slider');
+
+        $generateTestimonialImg = function ($filename, $text) {
+            $path = Storage::disk('public')->path('testimonials/' . $filename);
+            if (file_exists($path)) {
+                return 'testimonials/' . $filename;
+            }
+
+            $width = 200;
+            $height = 200;
+            $image = imagecreatetruecolor($width, $height);
+            $bgColor = imagecolorallocate($image, 245, 158, 11); // Amber
+            imagefill($image, 0, 0, $bgColor);
+            $textColor = imagecolorallocate($image, 255, 255, 255);
+            imagestring($image, 5, 60, 90, $text, $textColor);
+            imagejpeg($image, $path);
+            imagedestroy($image);
+            return 'testimonials/' . $filename;
+        };
+
+        $generateSliderImg = function ($filename, $text) {
+            $path = Storage::disk('public')->path('slider/' . $filename);
+            if (file_exists($path)) {
+                return 'slider/' . $filename;
+            }
+
+            $width = 1920;
+            $height = 1080;
+            $image = imagecreatetruecolor($width, $height);
+            $bgColor = imagecolorallocate($image, 15, 23, 42); // Dark Slate
+            imagefill($image, 0, 0, $bgColor);
+            $textColor = imagecolorallocate($image, 255, 255, 255);
+            imagestring($image, 5, 800, 500, $text, $textColor);
+            imagejpeg($image, $path);
+            imagedestroy($image);
+            return 'slider/' . $filename;
+        };
+
+        // Seed testimonials
+        \App\Models\Testimonial::updateOrCreate(
+            ['name' => 'Niken Wahyu Nur H., A.Md.Farm'],
+            [
+                'profession' => 'Bekerja di Staff Analytical Development R&D PT. Deltomed Laboratories',
+                'content' => 'Ambil jurusan Farmasi itu ibarat tersesat di jalan yang benar. Dijamin seru belajarnya, kamu akan belajar tentang \'Seni Meracik Obat!\'',
+                'photo_path' => $generateTestimonialImg('niken.jpg', 'Niken'),
+            ]
+        );
+
+        \App\Models\Testimonial::updateOrCreate(
+            ['name' => 'Ahmad Syaifudin, A.Md.T.'],
+            [
+                'profession' => 'Bekerja di Engineering Hotel GranDhika PT. Adhi Karya (Persero) Tbk. Alumni',
+                'content' => 'Berawalan dari jurusan otomotif sdi SMK dan melanjutkan study di D3 Teknologi Otomotif. Kuliah Solo? Polinus Aja',
+                'photo_path' => $generateTestimonialImg('ahmad.jpg', 'Ahmad'),
+            ]
+        );
+
+        \App\Models\Testimonial::updateOrCreate(
+            ['name' => 'Fitri Khotijah, A.Md.Kom'],
+            [
+                'profession' => 'Bekerja di Pengelola LPSE RSUD Dr. MOEWARDI',
+                'content' => 'Ingat apa mimpimu saat kamu memutuskan untuk kuliah? Jadikan itu semangat baru di setiap pagi kamu berangkat kuliah',
+                'photo_path' => $generateTestimonialImg('fitri.jpg', 'Fitri'),
+            ]
+        );
+
+        // Seed slider images
+        \App\Models\SliderImage::updateOrCreate(
+            ['title' => 'Pameran Karya Inovasi Mahasiswa D4 TRPL'],
+            [
+                'image_path' => $generateSliderImg('slide_1.jpg', 'Karya Inovasi D4 TRPL'),
+                'focus_x' => 50,
+                'focus_y' => 50,
+                'description' => 'Menampilkan produk-produk teknologi terbaik hasil karya mahasiswa rekayasa perangkat lunak.',
+            ]
+        );
+
+        \App\Models\SliderImage::updateOrCreate(
+            ['title' => 'Pengembangan Internet of Things (IoT)'],
+            [
+                'image_path' => $generateSliderImg('slide_2.jpg', 'Smart IoT Projects'),
+                'focus_x' => 50,
+                'focus_y' => 50,
+                'description' => 'Solusi pertanian cerdas dan sistem otomatisasi terintegrasi berbasis IoT.',
+            ]
+        );
+
+        \App\Models\SliderImage::updateOrCreate(
+            ['title' => 'Teknologi Virtual Reality dan Game Interaktif'],
+            [
+                'image_path' => $generateSliderImg('slide_3.jpg', 'Interactive VR & Games'),
+                'focus_x' => 50,
+                'focus_y' => 50,
+                'description' => 'Pengembangan game petualangan imersif dan simulasi VR menggunakan Unity Engine.',
+            ]
+        );
     }
 }

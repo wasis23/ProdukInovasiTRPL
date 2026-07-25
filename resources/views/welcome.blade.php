@@ -108,8 +108,113 @@
         </div>
     </header>
 
+    <!-- Image Slider at the Top -->
+    @if($sliderImages->isNotEmpty())
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-4" x-data="{
+            currentSlide: 0,
+            totalSlides: {{ $sliderImages->count() }},
+            autoplayInterval: null,
+            startAutoplay() {
+                this.autoplayInterval = setInterval(() => {
+                    this.next();
+                }, 5000);
+            },
+            stopAutoplay() {
+                if (this.autoplayInterval) {
+                    clearInterval(this.autoplayInterval);
+                }
+            },
+            next() {
+                this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+            },
+            prev() {
+                this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+            }
+        }" x-init="startAutoplay()" @mouseenter="stopAutoplay()" @mouseleave="startAutoplay()">
+            <div class="relative rounded-3xl overflow-hidden aspect-[21/9] min-h-[300px] sm:min-h-[400px] bg-slate-950 border border-slate-200/80 dark:border-slate-800 shadow-xl group">
+                <!-- Slides -->
+                <div class="relative w-full h-full">
+                    @foreach($sliderImages as $index => $slide)
+                        <div 
+                            x-show="currentSlide === {{ $index }}"
+                            x-transition:enter="transition ease-out duration-700"
+                            x-transition:enter-start="opacity-0 scale-102"
+                            x-transition:enter-end="opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-700"
+                            x-transition:leave-start="opacity-100 scale-100"
+                            x-transition:leave-end="opacity-0 scale-98"
+                            class="absolute inset-0 w-full h-full"
+                        >
+                            <img 
+                                src="{{ asset('storage/' . $slide->image_path) }}" 
+                                alt="{{ $slide->title ?? 'Slide ' . ($index + 1) }}"
+                                class="w-full h-full object-cover"
+                                style="object-position: {{ $slide->focus_x }}% {{ $slide->focus_y }}%;"
+                            >
+                            
+                            <!-- Dark Overlay Gradient -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent"></div>
+                            
+                            <!-- Slide Content -->
+                            @if($slide->title || $slide->description)
+                                <div class="absolute bottom-0 left-0 right-0 p-8 sm:p-12 text-left">
+                                    <div class="max-w-2xl">
+                                        @if($slide->title)
+                                            <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-3 tracking-tight font-heading leading-tight drop-shadow-md">
+                                                {{ $slide->title }}
+                                            </h2>
+                                        @endif
+                                        @if($slide->description)
+                                            <p class="text-sm sm:text-base text-slate-200 font-light drop-shadow-sm line-clamp-2">
+                                                {{ $slide->description }}
+                                            </p>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- Navigation Controls -->
+                @if($sliderImages->count() > 1)
+                    <!-- Left Arrow -->
+                    <button 
+                        @click="prev()" 
+                        class="absolute left-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg"
+                    >
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Right Arrow -->
+                    <button 
+                        @click="next()" 
+                        class="absolute right-4 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 cursor-pointer shadow-lg"
+                    >
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Indicators -->
+                    <div class="absolute bottom-6 right-8 flex gap-2 z-10">
+                        @foreach($sliderImages as $index => $slide)
+                            <button 
+                                @click="currentSlide = {{ $index }}"
+                                :class="currentSlide === {{ $index }} ? 'bg-indigo-500 w-8' : 'bg-white/40 hover:bg-white/60 w-2'"
+                                class="h-2 rounded-full transition-all duration-300 cursor-pointer"
+                            ></button>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        </section>
+    @endif
+
     <!-- Hero Section -->
-    <section class="relative pt-24 pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
+    <section class="relative pt-12 pb-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
         <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/5 text-xs text-indigo-600 dark:text-indigo-400 font-semibold tracking-wide uppercase mb-6">
             <span class="flex h-2 w-2 relative">
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
@@ -161,7 +266,17 @@
                     x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 scale-95"
                     x-transition:enter-end="opacity-100 scale-100"
-                    class="group rounded-2xl bg-white border border-slate-200/80 dark:bg-slate-900/40 dark:border-slate-800/80 overflow-hidden shadow-sm hover:shadow-lg dark:glow-effect hover:border-slate-300 dark:hover:border-slate-700/80 transition-all duration-300 flex flex-col h-full hover:translate-y-[-4px]"
+                    @click='openModal({
+                        id: {{ $product->id }},
+                        title: {{ json_encode($product->title) }},
+                        category_slug: {{ json_encode($product->category->slug) }},
+                        category_name: {{ json_encode($product->category->name) }},
+                        description: {{ json_encode($product->description) }},
+                        youtube_embed_url: {{ json_encode($product->youtube_embed_url) }},
+                        live_preview_url: {{ json_encode($product->live_preview_url) }},
+                        images: {{ $product->images->toJson() }}
+                    })'
+                    class="group rounded-2xl bg-white border border-slate-200/80 dark:bg-slate-900/40 dark:border-slate-800/80 overflow-hidden shadow-sm hover:shadow-lg dark:glow-effect hover:border-slate-300 dark:hover:border-slate-700/80 transition-all duration-300 flex flex-col h-full hover:translate-y-[-4px] cursor-pointer"
                 >
                     <!-- Image Thumbnail -->
                     <div class="aspect-video w-full bg-slate-950 overflow-hidden relative">
@@ -226,7 +341,7 @@
                             @endif
 
                             <button 
-                                @click='openModal({
+                                @click.stop='openModal({
                                     id: {{ $product->id }},
                                     title: {{ json_encode($product->title) }},
                                     category_slug: {{ json_encode($product->category->slug) }},
@@ -253,6 +368,110 @@
                 </div>
             @endforelse
         </div>
+    </section>
+
+    <!-- Testimonial Alumni Section -->
+    <section class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-200 dark:border-slate-900 relative z-10" x-data="{
+        activeSlide: 0,
+        totalSlides: {{ $testimonials->count() }},
+        slidesToShow: window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1),
+        init() {
+            window.addEventListener('resize', () => {
+                this.slidesToShow = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
+            });
+        },
+        next() {
+            if (this.activeSlide < this.totalSlides - this.slidesToShow) {
+                this.activeSlide++;
+            } else {
+                this.activeSlide = 0;
+            }
+        },
+        prev() {
+            if (this.activeSlide > 0) {
+                this.activeSlide--;
+            } else {
+                this.activeSlide = Math.max(0, this.totalSlides - this.slidesToShow);
+            }
+        }
+    }">
+        <!-- Section Header -->
+        <div class="text-center mb-12">
+            <div class="inline-block px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-4">
+                Testimonial Alumni
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
+                <span class="text-slate-950 dark:text-white">Kata</span> 
+                <span class="text-amber-500">Mereka</span>
+            </h2>
+        </div>
+
+        <!-- Testimonials Slider Container -->
+        @if($testimonials->isNotEmpty())
+            <div class="relative overflow-hidden px-1 py-4">
+                <!-- Slides wrapper -->
+                <div class="flex transition-transform duration-500 ease-out" :style="'transform: translateX(-' + (activeSlide * (100 / slidesToShow)) + '%)'">
+                    @foreach($testimonials as $testimonial)
+                        <div class="flex-shrink-0 px-4 w-full md:w-1/2 lg:w-1/3">
+                            <div class="h-full rounded-2xl bg-white border border-slate-200/80 dark:bg-slate-900/30 dark:border-slate-800/80 p-8 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-all duration-300 relative group dark:glow-effect">
+                                <!-- Quote Mark -->
+                                <span class="text-5xl text-amber-500/30 font-serif leading-none mb-4 font-bold">“</span>
+                                
+                                <!-- Testimonial Content -->
+                                <p class="text-slate-600 dark:text-slate-300 italic text-sm leading-relaxed mb-6 flex-grow">
+                                    "{{ $testimonial->content }}"
+                                </p>
+                                
+                                <!-- Alumnus Info -->
+                                <div class="flex flex-col items-center mt-auto">
+                                    <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-amber-500/40 mb-3 shadow-md bg-slate-100 dark:bg-slate-800">
+                                        @if($testimonial->photo_path)
+                                            <img src="{{ asset('storage/' . $testimonial->photo_path) }}" alt="{{ $testimonial->name }}" class="w-full h-full object-cover">
+                                        @else
+                                            <!-- Default avatar -->
+                                            <div class="w-full h-full flex items-center justify-center bg-amber-500/10 text-amber-500">
+                                                <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                                </svg>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <h4 class="font-bold text-slate-900 dark:text-white text-base mb-1">{{ $testimonial->name }}</h4>
+                                    <p class="text-slate-500 dark:text-slate-400 text-xs font-medium text-center">{{ $testimonial->profession }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <!-- Navigation Buttons and Line Indicator -->
+            <div class="flex items-center justify-center gap-6 mt-8" x-show="totalSlides > slidesToShow">
+                <!-- Prev Button -->
+                <button @click="prev()" class="p-3 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-600 hover:text-slate-950 dark:text-slate-400 dark:hover:text-white transition-all shadow-sm hover:shadow-md cursor-pointer flex items-center justify-center">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+
+                <!-- Line Indicator -->
+                <div class="w-24 h-1 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden relative">
+                    <div class="h-full bg-amber-500 rounded-full transition-all duration-500 absolute top-0"
+                         :style="'left: ' + (activeSlide * (100 / (totalSlides - slidesToShow + 1))) + '%; width: ' + (100 / (totalSlides - slidesToShow + 1)) + '%'"></div>
+                </div>
+
+                <!-- Next Button -->
+                <button @click="next()" class="p-3 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-600 hover:text-slate-950 dark:text-slate-400 dark:hover:text-white transition-all shadow-sm hover:shadow-md cursor-pointer flex items-center justify-center">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </div>
+        @else
+            <div class="text-center py-8 text-slate-500 dark:text-slate-400">
+                Belum ada testimoni alumni.
+            </div>
+        @endif
     </section>
 
     <!-- Footer -->
