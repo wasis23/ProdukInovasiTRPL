@@ -24,15 +24,15 @@ class SliderImageForm
                 
                 Slider::make('focus_x')
                     ->label('Titik Fokus Horisontal (X)')
-                    ->min(0)
-                    ->max(100)
+                    ->minValue(0)
+                    ->maxValue(100)
                     ->default(50)
                     ->helperText('0% (Kiri) - 50% (Tengah) - 100% (Kanan)'),
                 
                 Slider::make('focus_y')
                     ->label('Titik Fokus Vertikal (Y)')
-                    ->min(0)
-                    ->max(100)
+                    ->minValue(0)
+                    ->maxValue(100)
                     ->default(50)
                     ->helperText('0% (Atas) - 50% (Tengah) - 100% (Bawah)'),
 

@@ -32,7 +32,7 @@
         [x-cloak] { display: none !important; }
     </style>
 </head>
-<body class="min-h-screen relative overflow-x-hidden transition-colors duration-300" x-data="{
+<body class="min-h-screen flex flex-col relative overflow-x-hidden transition-colors duration-300" x-data="{
     theme: localStorage.getItem('theme') || 'dark',
     activeCategory: 'all',
     modalOpen: false,
@@ -108,7 +108,10 @@
         </div>
     </header>
 
-    <!-- Image Slider at the Top -->
+    <!-- Main Content Wrapper to push footer to the bottom -->
+    <main class="flex-grow">
+
+        <!-- Image Slider at the Top -->
     @if($sliderImages->isNotEmpty())
         <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 mb-4" x-data="{
             currentSlide: 0,
@@ -473,6 +476,8 @@
             </div>
         @endif
     </section>
+
+    </main>
 
     <!-- Footer -->
     <footer class="border-t border-slate-200 dark:border-slate-900 bg-white/60 dark:bg-slate-950/60 backdrop-blur-md py-6 mt-20 relative z-10">
