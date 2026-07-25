@@ -20,7 +20,7 @@ class SliderImageForm
                     ->disk('public')
                     ->directory('slider')
                     ->required()
-                    ->helperText('Gunakan gambar landscape berkualitas tinggi.'),
+                    ->helperText('Rekomendasi ukuran: 1920 x 820 piksel (Rasio 21:9). Gunakan gambar landscape berkualitas tinggi.'),
                 
                 Slider::make('focus_x')
                     ->label('Titik Fokus Horisontal (X)')
